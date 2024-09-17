@@ -1,47 +1,96 @@
-/**
- * @author juan, marlon & carlos
- * @version 1.0.0
- * 
- * Controlador de clientes
- * Este archivo define los controladores de clientes
- */
+const {response, request} = require('express');
+const { PrismaClient } = require('@prisma/client');
 
-const { response, request } = require('express');
+const prisma = new PrismaClient();
 
-const ShowClientes = async (req = request, res = response) => {
+const ShowUsers = async(req=request, res=response)=>{
+
+    const users = await prisma.users.findMany()
+    .catch(err=>{
+        return err.message;
+    }).finally((async ()=>{
+        await prisma.$disconnect();
+    }));
+
     res.json({
-        "saludo": "soy la respuesta de mostrar clientes"
+        users
     });
 };
 
-const AddClientes = async (req = request, res = response) => {
+const AddUsers = async(req=request, res=response)=>{
+
+    const { email, password } = req.body;
+
+    const result = await prisma.users.create({
+        data: {
+            email,
+            password
+        }
+    }).catch(err=>{
+        return err.message;
+    }).finally((async ()=>{
+        await prisma.$disconnect();
+    }));
+
     res.json({
-        "saludo": "soy la respuesta de agregar clientes"
+        result
     });
 };
 
-const ShowCliente = async (req = request, res = response) => {
+const ShowUser = async(req=request, res=response)=>{
     res.json({
-        "saludo": "soy la respuesta de mostrar un cliente"
+        "saludo":"soy la respuesta de mostrar usuarios"
     });
 };
 
-const EditClientes = async (req = request, res = response) => {
+const EditUsers = async(req=request, res=response)=>{
+    const { id } = req.params;
+
+    const { email, password } = req.body;
+
+    const result = await prisma.users.update({
+        where:{
+            id: Number(id)
+        },
+        data: {
+            email,
+            password
+        }
+    }).catch(err=>{
+        return err.message;
+    }).finally((async ()=>{
+        await prisma.$disconnect();
+    }));
+
     res.json({
-        "saludo": "soy la respuesta de editar clientes"
+        result
+    });
+
+};
+
+const DeleteUsers = async(req=request, res=response)=>{
+    const { id } = req.params;
+
+    const result = await prisma.users.delete({
+        where:{
+            id: Number(id)
+        }
+    }).catch(err=>{
+        return err.message;
+    }).finally((async ()=>{
+        await prisma.$disconnect();
+    }));
+
+    res.json({
+        result
     });
 };
 
-const DeleteClientes = async (req = request, res = response) => {
-    res.json({
-        "saludo": "soy la respuesta de eliminar clientes"
-    });
-};
 
 module.exports = {
-    AddClientes,
-    ShowClientes,
-    ShowCliente,
-    EditClientes,
-    DeleteClientes
+    AddUsers,
+    ShowUsers,
+    ShowUser,
+    EditUsers,
+    DeleteUsers
 };

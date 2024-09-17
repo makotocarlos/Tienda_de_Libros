@@ -6,23 +6,23 @@
  * Este archivo define las rutas de clientes
  */
 
-const { Router } = require('express');
+const {Router} = require('express');
 
-const router = Router();
+const router= Router();
 
 /**
- * Importando los métodos
+ * Importando los metodos
  */
 
-const { AddClientes, ShowClientes, DeleteClientes, EditClientes, ShowCliente } = require('../controllers/clientes.controllers');
+const {AddUsers, ShowUsers, DeleteUsers, EditUsers, ShowUser} = require('../Controllers/clientes.controllers');
 
 /**
  * Rutas
  */
-router.get('/', ShowClientes);
-router.post('/', AddClientes);
-router.delete('/', DeleteClientes);
-router.put('/', EditClientes);
-router.get('/:id', ShowCliente);
+router.get('/', ShowUsers);
+router.post('/', AddUsers);
+router.delete('/', DeleteUsers);
+router.put('/:id', EditUsers);
+router.get('/:id', ShowUser);
 
 module.exports = router;
